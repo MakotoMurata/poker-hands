@@ -27,7 +27,7 @@ background-repeat: no-repeat;
 background-position: center;
 background-size: cover;
 background-image: url("/top.png");
-opacity:0.5;
+opacity:0.2;
 }
 
 h1{
@@ -36,6 +36,55 @@ h1{
   color: rgb(30, 30, 30);
   font-size: 40px;
   font-weight: bold;
-  margin-top: 100px;
+  margin-top: 80px;
   position: absolute;
+}
+
+.container{
+  width:50%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin:auto;
+  background-color: rgb(218, 223, 222);
+  border-radius: 20px;
+}
+
+ul{
+  list-style: none;
+}
+
+textarea{
+  width: 50%;
+  height: 40px;
+  padding: 10px 10px;
+  margin-top: 30px;
+  font-size: 30px;
+  left: 0;
+  right: 0;
+  resize: none;
+  letter-spacing: 1px;
+  text-align: center;
+
+
+}
+
+input{
+  width: 50%;
+  height: 50px;
+  margin-top:20px;
+  margin-bottom: 0;
+  background-color: rgb(89, 191, 201);
+  color: white;
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 30px;
+  border-radius: 20px;
+}
+
+input:focus{
+  opacity: 0.5;
 }
