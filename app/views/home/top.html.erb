@@ -1,7 +1,7 @@
 <div class="main">
-  <img class="bg" src="/top.png">
+  <div class="layer">
     <div class="container">
-      <p>Check a Porker Hand</p>
+      <h1>Check a Porker Hand</h1>
       <div class="checkarea">
         <%= form_tag("/check") do %>
           <div class="form">
@@ -15,8 +15,12 @@
             </ul>
           </div>
           <div class="result">
+            <p>
+              <%= @YAKU[5] %>
+            </p>
           </div>
         <% end %>
       </div>
     </div>
+  </div>
 </div>
