@@ -7,8 +7,7 @@
           <div class="form">
             <ul>
               <li>
-                <textarea name="hands">
-                </textarea>
+                <textarea name="hand"><%= params[:hand]%></textarea>
               </li>
               <li>
                 <input type="submit" value="Check">
@@ -17,7 +16,7 @@
           </div>
           <div class="result">
             <p>
-              <%= @result %>
+               <%= @hand.result %>
             </p>
           </div>
         <% end %>

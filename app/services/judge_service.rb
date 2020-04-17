@@ -1,9 +1,11 @@
 module JudgeModule
   class HandsJudgeService
-      include ActiveModel::Model　
-      include Handsmodule
-    attr_accessor :hand
-      def judge #５枚のカードの内容を、スートと数字をつけて文字列として入力。
+      include ActiveModel::Model
+      require_relative "hands_service"
+      include HandsModule
+      attr_accessor :hand
+      attr_reader :result
+      def judge(hand) #５枚のカードの内容を、スートと数字をつけて文字列として入力。
         suit = hand.delete("^A-Z| ").split(' ')
         snum = hand.delete("^0-9| ").split(' ')
         num = []
@@ -31,24 +33,24 @@ module JudgeModule
         end
 
         if count_box.sort.reverse == [4,1]
-            @result=YAKU[7]
+            @result = YAKU[7]
         elsif  count_box.sort.reverse == [3,2]
-            @result=YAKU[6]
+            @result = YAKU[6]
         elsif  count_box.sort.reverse == [3,1,1]
-            @result=YAKU[3]
+            @result = YAKU[3]
         elsif  count_box.sort.reverse == [2,2,1]
-            @result=YAKU[2]
+            @result = YAKU[2]
         elsif  count_box.sort.reverse == [2,1,1,1]
-            @result=YAKU[1]
+            @result = YAKU[1]
         elsif count_box.sort.reverse == [1,1,1,1,1]
             if straight == 1 && flush == 1 &&  num.sort != [1,10,11,12,13]
-                 @result=YAKU[8]
+                 @result = YAKU[8]
             elsif flush == 1
-                 @result=YAKU[5]
+                 @result = YAKU[5]
             elsif straight == 1
-                 @result=YAKU[4]
+                 @result = YAKU[4]
             else
-                 @result=YAKU[0]
+                 @result = YAKU[0]
             end
         end
       end

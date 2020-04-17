@@ -1,16 +1,14 @@
 class HomeController < ApplicationController
+  require_relative "../services/judge_service"
   include JudgeModule
   def top
-    @hand=HandsJudgeService.new()
+    @hand = HandsJudgeService.new
   end
 
   def check
-    @hand = HandsJudgeService.new(hand: params[:hands])
-    if @hand.judge
-      render("/home/show")
-    else
-      render("/home/error")
-    end
+    @hand = HandsJudgeService.new
+    @hand.judge(params[:hand])
+    render :show
   end
 
   def show
