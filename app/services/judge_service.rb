@@ -5,28 +5,21 @@ module JudgeModule
       include HandsModule
       attr_accessor :hand
       attr_reader :result
-      def judge(hand) #５枚のカードの内容を、スートと数字をつけて文字列として入力。
-        suit = hand.delete("^A-Z| ").split(' ')
-        snum = hand.delete("^0-9| ").split(' ')
+      def judge
+        suit = hand.delete("^A-Z| ").split(" ")
+        snum = hand.delete("^0-9| ").split(" ")
         num = []
         flush = 0
         straight = 0
-
         for i in 0..4
             num[i] = snum[i].to_i
         end
-
-        #手札のスートが全て一致しているか判定
         if suit.count(suit[0]) == suit.length
            flush = 1
         end
-
-        #手札が全て続き番号（もしくは、[1,10,11,12,13]）になっているか判定
         if num.sort[1] == num.sort[0] +1 && num.sort[2] == num.sort[0] + 2 && num.sort[3] == num.sort[0] +3 && num.sort[4] == num.sort[0] + 4 || num.sort == [1,10,11,12,13]
             straight = 1
         end
-
-        #カードの数を数えてから役を判定
         count_box = []
         for i in 0..num.uniq.length-1
             count_box[i] = num.count(num.uniq[i])
@@ -52,6 +45,24 @@ module JudgeModule
             else
                  @result = YAKU[0]
             end
+        end
+      end
+
+      validate :validate_check
+      def validate_check
+        cards = hand.split(" ")
+        if hand.blank?
+          errors[:base] << "5つのカード指定文字を半角スペース区切りで入力してください"
+        elsif hand !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
+          errors[:base] << "5つのカード指定文字を半角スペース区切りで入力してください"
+          cards.each_with_index do |card,idx|
+            index = idx +1
+            if card !~  /\A[SDCH]([1-9]|1[0-3])\z/
+               errors[:base] << "#{index}番目のカード指定文字が不正です(#{card})"
+            end
+          end
+        elsif cards.size - cards.uniq.size != 0
+          errors[:base] << "カードが重複しています"
         end
       end
   end

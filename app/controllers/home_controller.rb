@@ -6,15 +6,21 @@ class HomeController < ApplicationController
   end
 
   def check
-    @hand = HandsJudgeService.new
-    @hand.judge(params[:hand])
-    render :show
+    @hand = HandsJudgeService.new(hand: params[:hand])
+    if @hand.invalid?
+      render :error
+    elsif
+      @hand.judge
+      render :show
+    end
   end
 
   def show
+    @hand = HandsJudgeService.new
   end
 
   def error
+    @hand = HandsJudgeService.new
   end
 
 end

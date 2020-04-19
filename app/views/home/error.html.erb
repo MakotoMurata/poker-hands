@@ -7,17 +7,18 @@
           <div class="form">
             <ul>
               <li>
-                <textarea name="hands">
-                </textarea>
+                <input class="text" name="hand" value="<%= params[:hand]%>">
               </li>
               <li>
-                <input type="submit" value="Check">
+                <input class="btn" type="submit" value="Check">
               </li>
             </ul>
           </div>
-          <div class="result">
+          <div class="error_message">
             <p>
-              <%= @error_message %>
+               <% @hand.errors.full_messages.each do |message| %>
+               <%= message %>
+               <% end %>
             </p>
           </div>
         <% end %>
