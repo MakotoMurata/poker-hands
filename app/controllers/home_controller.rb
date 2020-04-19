@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   end
 
   def check
-    @hand = HandsJudgeService.new(hand: params[:hand])
+    @hand = HandsJudgeService.new(hand: params[:cards])
     if @hand.invalid?
       render :error
     elsif
@@ -22,5 +22,4 @@ class HomeController < ApplicationController
   def error
     @hand = HandsJudgeService.new
   end
-
 end
