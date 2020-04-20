@@ -9,7 +9,7 @@ class HomeController < ApplicationController
     @hand = HandsJudgeService.new(hand: params[:cards])
     if @hand.invalid?
       render :error
-    elsif
+    else
       @hand.judge
       render :show
     end
