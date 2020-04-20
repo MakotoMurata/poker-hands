@@ -4,24 +4,16 @@
       <h1>Check a Porker Hand</h1>
       <div class="checkarea">
         <%= form_tag("/check") do %>
-          <div class="form">
-            <ul class="form_area">
-              <li>
-                <input class="text" name="cards" value="<%= params[:cards]%>">
-              </li>
-              <li>
-                <input class="btn" type="submit" value="Check">
-              </li>
-            </ul>
-          </div>
-          <div class="error_message">
-            <ul class="errors_list">
-               <% @hand.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-               <% end %>
-            </ul>
-          </div>
+        <ul class="form">
+          <li><input class="text" name="cards" value="<%= params[:cards]%>"></li>
+          <li><input class="btn" type="submit" value="Check"></li>
+        </ul>
         <% end %>
+        <ul class="errors_message">
+          <% @hand.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     </div>
   </div>

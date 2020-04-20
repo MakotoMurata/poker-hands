@@ -1,8 +1,6 @@
 module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
-    require_relative "hands_service"
-    include HandsModule
     attr_accessor :hand
     attr_reader :result
     def judge
@@ -28,26 +26,27 @@ module JudgeModule
         count_box[i] = num.count(num.uniq[i])
       end
 
-      if count_box.sort.reverse == [4,1]
-        @result = HANDS[7]
-      elsif count_box.sort.reverse == [3,2]
-        @result = HANDS[6]
-      elsif count_box.sort.reverse == [3,1,1]
-        @result = HANDS[3]
-      elsif count_box.sort.reverse == [2,2,1]
-        @result = HANDS[2]
-      elsif  count_box.sort.reverse == [2,1,1,1]
-        @result = HANDS[1]
-      elsif count_box.sort.reverse == [1,1,1,1,1]
+        dupilication = count_box.sort.reverse
+      if dupilication == [1,1,1,1,1]
         if straight == 1 && flush == 1 &&  num.sort != [1,10,11,12,13]
-          @result = HANDS[8]
+          @result = "ストレートフラッシュ"
         elsif flush == 1
-          @result = HANDS[5]
+          @result = "フラッシュ"
         elsif straight == 1
-          @result = HANDS[4]
+          @result = "ストレート"
         else
-          @result = HANDS[0]
+          @result = "ハイカード"
         end
+      elsif dupilication == [4,1]
+        @result = "フォーカード"
+      elsif dupilication == [3,2]
+        @result = "フルハウス"
+      elsif dupilication == [3,1,1]
+        @result = "スリーカード"
+      elsif dupilication == [2,2,1]
+        @result = "ツーペア"
+      elsif dupilication == [2,1,1,1]
+        @result = "ワンペア"
       end
     end
 
@@ -55,9 +54,9 @@ module JudgeModule
     def validate_check
       cards = hand.split(" ")
       if hand.blank?
-        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と(半角数字1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
+        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
       elsif hand !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
-        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と(半角数字1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
+        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
         cards.each_with_index do |card,idx|
         index = idx +1
           if card !~  /\A[SDCH]([1-9]|1[0-3])\z/

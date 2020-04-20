@@ -49,9 +49,6 @@ body{
 
 .form{
   text-align: center;
-}
-
-.form_area{
   list-style: none;
   margin: 0;
   padding:0;
@@ -95,28 +92,22 @@ body{
   font-weight: bold;
 }
 
-.error_message{
+.errors_message{
   background-color: rgb(250, 105, 66);
   width: 450px;
   border-radius: 5px;
   font-size: 13px;
   padding: 10px;
   margin: 20px auto 0;
+  list-style: inside;
 }
 
-.errors_list{
-  list-style: square;
-}
-
-.attention {
+.attention{
   background-color: rgba(#e49f42, 0.98);
   width: 450px;
   border-radius: 5px;
   font-size: 13px;
   padding: 10px;
   margin: 20px auto 0;
-}
-
-.attention_message{
   list-style: none;
 }
