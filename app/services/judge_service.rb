@@ -1,6 +1,8 @@
 module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
+    require_relative ("hands_service")
+    include HandsModule
     attr_accessor :hand
     attr_reader :result
     def judge
@@ -29,24 +31,24 @@ module JudgeModule
         dupilication = count_box.sort.reverse
       if dupilication == [1,1,1,1,1]
         if straight == 1 && flush == 1 &&  num.sort != [1,10,11,12,13]
-          @result = "ストレートフラッシュ"
+          @result = HANDS[8]
         elsif flush == 1
-          @result = "フラッシュ"
+          @result = HANDS[5]
         elsif straight == 1
-          @result = "ストレート"
+          @result = HANDS[4]
         else
-          @result = "ハイカード"
+          @result = HANDS[0]
         end
       elsif dupilication == [4,1]
-        @result = "フォーカード"
+        @result = HANDS[7]
       elsif dupilication == [3,2]
-        @result = "フルハウス"
+        @result = HANDS[6]
       elsif dupilication == [3,1,1]
-        @result = "スリーカード"
+        @result = HANDS[3]
       elsif dupilication == [2,2,1]
-        @result = "ツーペア"
+        @result = HANDS[2]
       elsif dupilication == [2,1,1,1]
-        @result = "ワンペア"
+        @result = HANDS[1]
       end
     end
 

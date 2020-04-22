@@ -30,8 +30,8 @@ body{
 
 .container{
   width: 1350px;
-  height: 900px;
-  margin: 100px auto 0;
+  height: 700px;
+  margin: 100px auto 0;;
 }
 
 .container h1{
@@ -42,7 +42,7 @@ body{
 .checkarea{
   background-color: rgb(230, 230, 230);
   width: 50%;
-  height: 50%;
+  height: 500px;
   margin: 0 auto;
   border-radius: 30px;
 }
@@ -61,7 +61,7 @@ body{
   resize: none;
   letter-spacing: 1px;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .btn{
@@ -73,7 +73,7 @@ body{
   font-weight: 300;
   font-size: 30px;
   border-radius: 20px;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .btn:hover{
@@ -108,6 +108,6 @@ body{
   border-radius: 5px;
   font-size: 13px;
   padding: 10px;
-  margin: 20px auto 0;
+  margin: 30px auto 0;
   list-style: none;
 }
