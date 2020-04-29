@@ -1,4 +1,4 @@
-class HomeController < ApplicationController
+class CardsController < ApplicationController
   require_relative "../services/judge_service"
   include JudgeModule
   def top
@@ -11,11 +11,11 @@ class HomeController < ApplicationController
       render :error
     else
       @hand.judge
-      render :show
+      render :result
     end
   end
 
-  def show
+  def result
     @hand = HandsJudgeService.new
   end
 
