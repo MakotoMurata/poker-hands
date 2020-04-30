@@ -1,54 +1,54 @@
 module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
-    require_relative ("hands_service")
+    require_relative ("const/poker_hand_definition")
     include HandsModule
     attr_accessor :hand
     attr_reader :result
     def judge
-      suit = hand.delete("^A-Z| ").split(" ")
-      snum = hand.delete("^0-9| ").split(" ")
-      num = []
-      flush = 0
-      straight = 0
-      for i in 0..4
-        num[i] = snum[i].to_i
+      suits = hand.delete("^A-Z| ").split(" ")
+      snums = hand.delete("^0-9| ").split(" ")
+      nums = snums.map(&:to_i)
+
+      if suits.count(suits[0]) == suits.length
+        flush = true
+      else
+        flush = false
       end
 
-      if suit.count(suit[0]) == suit.length
-        flush = 1
-      end
-
-      if num.sort[1] == num.sort[0] +1 && num.sort[2] == num.sort[0] + 2 && num.sort[3] == num.sort[0] +3 && num.sort[4] == num.sort[0] + 4 || num.sort == [1,10,11,12,13]
-        straight = 1
+      if nums.sort[1] == nums.sort[0] +1 && nums.sort[2] == nums.sort[0] + 2 && nums.sort[3] == nums.sort[0] +3 && nums.sort[4] == nums.sort[0] + 4 || nums.sort == [1,10,11,12,13]
+        straight = true
+      else
+        straight = false
       end
 
       count_box = []
-      for i in 0..num.uniq.length-1
-        count_box[i] = num.count(num.uniq[i])
+      range = 0..nums.uniq.length-1
+      range.each do |num|
+        count_box[num] = nums.count(nums.uniq[num])
       end
 
-        dupilication = count_box.sort.reverse
-      if dupilication == [1,1,1,1,1]
-        if straight == 1 && flush == 1 &&  num.sort != [1,10,11,12,13]
-          @result = HANDS[8]
-        elsif flush == 1
-          @result = HANDS[5]
-        elsif straight == 1
-          @result = HANDS[4]
-        else
-          @result = HANDS[0]
-        end
-      elsif dupilication == [4,1]
-        @result = HANDS[7]
-      elsif dupilication == [3,2]
-        @result = HANDS[6]
-      elsif dupilication == [3,1,1]
-        @result = HANDS[3]
-      elsif dupilication == [2,2,1]
-        @result = HANDS[2]
-      elsif dupilication == [2,1,1,1]
-        @result = HANDS[1]
+      dupilication = count_box.sort.reverse
+      case [dupilication, straight, flush]
+      when [[1,1,1,1,1], true, true]
+          @result = HANDS[:straight_flush]
+      when [[1,1,1,1,1], true, false]
+          @result = HANDS[:straight]
+      when [[1,1,1,1,1], false, true]
+          @result = HANDS[:flush]
+      when [[1,1,1,1,1], false, false]
+          @result = HANDS[:highcard]
+      when [[4,1], false, false]
+          @result = HANDS[:four_cards]
+      when [[3,2], false, false]
+          @result = HANDS[:full_house]
+      when [[3,1,1], false, false]
+          @result = HANDS[:three_cards]
+      when [[2,2,1], false, false]
+          @result = HANDS[:two_pair]
+      when [[2,1,1,1],false, false]
+          @result = HANDS[:one_pair]
+      else
       end
     end
 
