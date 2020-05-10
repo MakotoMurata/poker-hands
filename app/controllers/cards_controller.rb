@@ -7,7 +7,7 @@ class CardsController < ApplicationController
 
   def check
     @hand = HandsJudgeService.new(hand: params[:cards])
-    if @hand.invalid?
+    if @hand.validate_check
       render :error
     else
       @hand.judge
