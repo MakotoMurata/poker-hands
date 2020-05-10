@@ -7,8 +7,7 @@ module JudgeModule
     attr_reader :result
     def judge
       suits = hand.delete("^A-Z| ").split(" ")
-      snums = hand.delete("^0-9| ").split(" ")
-      nums = snums.map(&:to_i)
+      nums = hand.delete("^0-9| ").split(" ").map(&:to_i)
 
       if suits.count(suits[0]) == suits.length
         flush = true
@@ -23,9 +22,9 @@ module JudgeModule
       end
 
       count_box = []
-      range = 0..nums.uniq.length-1
-      range.each do |num|
-        count_box[num] = nums.count(nums.uniq[num])
+      dup_num = nums.uniq
+      dup_num.each do |x|
+        count_box << nums.count(x)
       end
 
       dupilication = count_box.sort.reverse
@@ -56,9 +55,9 @@ module JudgeModule
     def validate_check
       cards = hand.split(" ")
       if hand.blank?
-        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
+        errors[:base] << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
       elsif hand !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
-        errors[:base] <<   "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
+        errors[:base] << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
         cards.each_with_index do |card,idx|
         index = idx +1
           if card !~  /\A[SDCH]([1-9]|1[0-3])\z/
