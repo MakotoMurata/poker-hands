@@ -3,8 +3,7 @@ module JudgeModule
     include ActiveModel::Model
     require_relative ("const/poker_hand_definition")
     include HandsModule
-    attr_accessor :hand
-    attr_accessor :result
+    attr_accessor :hand, :result, :errors
     def judge
       suits = hand.delete("^A-Z| ").split(" ")
       nums = hand.delete("^0-9| ").split(" ").map(&:to_i)
@@ -51,7 +50,6 @@ module JudgeModule
       end
     end
 
-    attr_accessor :errors
     def validate_check
       cards = hand.split(" ")
       @errors = []
