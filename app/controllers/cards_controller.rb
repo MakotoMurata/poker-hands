@@ -16,10 +16,8 @@ class CardsController < ApplicationController
   end
 
   def result
-    @hand = HandsJudgeService.new
   end
 
   def error
-    @hand = HandsJudgeService.new
   end
 end

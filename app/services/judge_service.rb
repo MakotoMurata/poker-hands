@@ -29,30 +29,30 @@ module JudgeModule
       dupilication = count_box.sort.reverse
       case [dupilication, straight, flush]
       when [[1,1,1,1,1], true, true]
-          @result = HANDS[:straight_flush]
+          @result = HANDS[8][:straight_flush]
       when [[1,1,1,1,1], true, false]
-          @result = HANDS[:straight]
+          @result = HANDS[4][:straight]
       when [[1,1,1,1,1], false, true]
-          @result = HANDS[:flush]
+          @result = HANDS[5][:flush]
       when [[1,1,1,1,1], false, false]
-          @result = HANDS[:highcard]
+          @result = HANDS[0][:highcard]
       when [[4,1], false, false]
-          @result = HANDS[:four_cards]
+          @result = HANDS[7][:four_cards]
       when [[3,2], false, false]
-          @result = HANDS[:full_house]
+          @result = HANDS[6][:full_house]
       when [[3,1,1], false, false]
-          @result = HANDS[:three_cards]
+          @result = HANDS[3][:three_cards]
       when [[2,2,1], false, false]
-          @result = HANDS[:two_pair]
+          @result = HANDS[2][:two_pair]
       when [[2,1,1,1],false, false]
-          @result = HANDS[:one_pair]
+          @result = HANDS[1][:one_pair]
       else
       end
     end
 
     def validate_check
-      cards = hand.split(" ")
       @errors = []
+      cards = hand.split(" ")
       if hand.empty?
         @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
       elsif cards.size - cards.uniq.size != 0
@@ -67,5 +67,17 @@ module JudgeModule
         end
       end
     end
+
+    # def best_hand_check(cards)
+    #   strength_parametes =
+    #   strongest_number = strength_parametes.max
+    #   strength_parametes.each do |x|
+    #     if strongest_number == x
+    #       best = true
+    #     elsif strongest_number != hands_set[key]
+    #       best = false
+    #     end
+    #   end
+    # end
   end
 end
