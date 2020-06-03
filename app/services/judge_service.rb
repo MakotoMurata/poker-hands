@@ -1,9 +1,12 @@
 module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
+
     require_relative ("const/poker_hand_definition")
     include HandsModule
-    attr_accessor :card, :result, :errors
+
+    attr_accessor :card, :hand, :errors, :best
+
     def judge
       suits = card.delete("^A-Z| ").split(" ")
       nums = card.delete("^0-9| ").split(" ").map(&:to_i)
@@ -26,26 +29,26 @@ module JudgeModule
         count_box << nums.count(x)
       end
 
-      dupilication = count_box.sort.reverse
-      case [dupilication, straight, flush]
+      dupilicate = count_box.sort.reverse
+      case [dupilicate, straight, flush]
       when [[1,1,1,1,1], true, true]
-          @result = HANDS[8][:straight_flush]
+          @hand = HANDS[8][:straight_flush]
       when [[1,1,1,1,1], true, false]
-          @result = HANDS[4][:straight]
+          @hand = HANDS[4][:straight]
       when [[1,1,1,1,1], false, true]
-          @result = HANDS[5][:flush]
+          @hand = HANDS[5][:flush]
       when [[1,1,1,1,1], false, false]
-          @result = HANDS[0][:highcard]
+          @hand = HANDS[0][:high_card]
       when [[4,1], false, false]
-          @result = HANDS[7][:four_cards]
+          @hand = HANDS[7][:four_cards]
       when [[3,2], false, false]
-          @result = HANDS[6][:full_house]
+          @hand = HANDS[6][:full_house]
       when [[3,1,1], false, false]
-          @result = HANDS[3][:three_cards]
+          @hand = HANDS[3][:three_cards]
       when [[2,2,1], false, false]
-          @result = HANDS[2][:two_pair]
+          @hand = HANDS[2][:two_pair]
       when [[2,1,1,1],false, false]
-          @result = HANDS[1][:one_pair]
+          @hand = HANDS[1][:one_pair]
       else
       end
     end
@@ -68,16 +71,16 @@ module JudgeModule
       end
     end
 
-    # def best_hand_check(cards)
-    #   strength_parametes =
-    #   strongest_number = strength_parametes.max
-    #   strength_parametes.each do |x|
-    #     if strongest_number == x
-    #       best = true
-    #     elsif strongest_number != hands_set[key]
-    #       best = false
-    #     end
-    #   end
-    # end
+    def best_check(hand_set)
+      str_parameters = hand_set.keys
+      strongest_number = str_parameters.max
+      hand_set.each do |hand|
+        if strongest_number == hand.key
+          @best = "true"
+        else
+          @best = "false"
+        end
+      end
+    end
   end
 end

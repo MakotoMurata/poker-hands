@@ -13,11 +13,11 @@ RSpec.describe CardsController, type: :controller do
   end
 
   describe 'Post #check' do
-    let(:hand) {HandsJudgeService.new(hand: params[:cards])}
+    let(:hand) {HandsJudgeService.new(card: params[:card_set])}
     context '入力された値に不正がある場合' do
       before do
         hand = ""
-        post :check, params: {cards: hand}
+        post :check, params: {card_set: hand}
       end
       it 'errorテンプレートを表示すること' do
         expect(response).to render_template :error
@@ -26,7 +26,7 @@ RSpec.describe CardsController, type: :controller do
     context '入力された値に不正がない場合' do
       before do
         hand = "S1 S2 S3 S4 S5"
-        post :check, params: {cards: hand}
+        post :check, params: {card_set: hand}
       end
       it 'resultテンプレートを表示すること' do
         expect(response).to render_template :result
