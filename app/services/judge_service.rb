@@ -3,10 +3,10 @@ module JudgeModule
     include ActiveModel::Model
     require_relative ("const/poker_hand_definition")
     include HandsModule
-    attr_accessor :hand, :result, :errors
+    attr_accessor :card, :result, :errors
     def judge
-      suits = hand.delete("^A-Z| ").split(" ")
-      nums = hand.delete("^0-9| ").split(" ").map(&:to_i)
+      suits = card.delete("^A-Z| ").split(" ")
+      nums = card.delete("^0-9| ").split(" ").map(&:to_i)
 
       if suits.count(suits[0]) == suits.length
         flush = true
@@ -52,12 +52,12 @@ module JudgeModule
 
     def validate_check
       @errors = []
-      cards = hand.split(" ")
-      if hand.empty?
+      cards = card.split(" ")
+      if card.empty?
         @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
       elsif cards.size - cards.uniq.size != 0
         @errors << "カードが重複しています"
-      elsif hand !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
+      elsif card !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
         @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
         cards.each_with_index do |card,idx|
         index = idx +1
