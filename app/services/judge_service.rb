@@ -2,10 +2,10 @@ module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
 
-    require_relative ("const/poker_hand_definition")
+    require_relative("const/poker_hand_definition")
     include HandsModule
 
-    attr_accessor :card, :hand, :errors, :best
+    attr_accessor :card, :hand, :errors, :best, :parameter
 
     def judge
       suits = card.delete("^A-Z| ").split(" ")
@@ -32,23 +32,23 @@ module JudgeModule
       dupilicate = count_box.sort.reverse
       case [dupilicate, straight, flush]
       when [[1,1,1,1,1], true, true]
-          @hand = HANDS[8][:straight_flush]
+          @hand = HANDS[8]
       when [[1,1,1,1,1], true, false]
-          @hand = HANDS[4][:straight]
+          @hand = HANDS[4]
       when [[1,1,1,1,1], false, true]
-          @hand = HANDS[5][:flush]
+          @hand = HANDS[5]
       when [[1,1,1,1,1], false, false]
-          @hand = HANDS[0][:high_card]
+          @hand = HANDS[0]
       when [[4,1], false, false]
-          @hand = HANDS[7][:four_cards]
+          @hand = HANDS[7]
       when [[3,2], false, false]
-          @hand = HANDS[6][:full_house]
+          @hand = HANDS[6]
       when [[3,1,1], false, false]
-          @hand = HANDS[3][:three_cards]
+          @hand = HANDS[3]
       when [[2,2,1], false, false]
-          @hand = HANDS[2][:two_pair]
+          @hand = HANDS[2]
       when [[2,1,1,1],false, false]
-          @hand = HANDS[1][:one_pair]
+          @hand = HANDS[1]
       else
       end
     end
@@ -71,15 +71,15 @@ module JudgeModule
       end
     end
 
-    def best_check(hand_set)
-      str_parameters = hand_set.keys
-      strongest_number = str_parameters.max
-      hand_set.each do |hand|
-        if strongest_number == hand.key
-          @best = "true"
-        else
-          @best = "false"
-        end
+    def get_parameter(hand)
+      @parameter = HANDS.index(hand)
+    end
+
+    def best_hand_check(parameters,parameter)
+      if parameters.max == parameter
+        @best = true
+      else
+        @best = false
       end
     end
   end

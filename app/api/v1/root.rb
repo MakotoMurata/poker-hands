@@ -1,7 +1,6 @@
 module V1
   class Root < Grape::API
-    helpers V1::Helpers::CardsHelper
-    #localhost:3000//vi
+    #localhost:3000/v1
     version :v1, :using => :path
     format :json
 
