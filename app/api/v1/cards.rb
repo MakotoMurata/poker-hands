@@ -19,7 +19,7 @@ module V1
         #cardsに繰り返し処理をかける
         parameters =[]
         cards.each do |card|
-          #それぞれのインスタンスが持つカードに不正があれば、errorsというインスタンス変数
+          #それぞれのインスタンスが持つカードに不正があれば、errorsというインスタンス変数を持つようにする
           if card.validate_check
             #それぞれのインスタンスが持つカードに不正がなければ、役判定をかけていく
           else
@@ -39,11 +39,11 @@ module V1
         #カードに不正がありhandに役が入っていないインスタンスは、情報をerrorsに配列として入れていく
         cards.each do |card|
           if card.hand == nil
-            errors << [card: card.card,msg:card.errors]
+            errors << {card: card.card,msg:card.errors}
             @errors = {error: errors}
           else
             #カードが正常でhandに役が入っているインスタンスは、情報をresultsに配列として入れていく
-            results << [card: card.card,hand: card.hand,best: card.best]
+            results << {card: card.card,hand: card.hand,best: card.best}
             @results = {result: results}
           end
         end
@@ -56,7 +56,7 @@ module V1
           present @errors
         else
           #間違ったカード入力と正しいカード入力が混ざっている場合はどちらも表示
-          @all_results = [@results,@errors]
+          @all_results = {result:results,error:errors}
           present @all_results
         end
       end
