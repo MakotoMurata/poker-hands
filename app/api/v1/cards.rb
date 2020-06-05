@@ -3,7 +3,7 @@ module V1
     require_relative '../../services/judge_service'
     include JudgeModule
     resources :cards do
-      desc '複数のカードセットを受け取り、card,hand,bestを配列として返すAPI'
+      desc 'JSON形式で正しいエンドポイントにリクエストされたとき'
       params do
         requires :cards, type: Array
       end

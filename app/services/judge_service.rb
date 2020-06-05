@@ -32,23 +32,23 @@ module JudgeModule
       dupilicate = count_box.sort.reverse
       case [dupilicate, straight, flush]
       when [[1,1,1,1,1], true, true]
-          @hand = HANDS[8]
+          @hand = HANDS[:straight_flush]
       when [[1,1,1,1,1], true, false]
-          @hand = HANDS[4]
+          @hand = HANDS[:straight]
       when [[1,1,1,1,1], false, true]
-          @hand = HANDS[5]
+          @hand = HANDS[:flush]
       when [[1,1,1,1,1], false, false]
-          @hand = HANDS[0]
+          @hand = HANDS[:high_card]
       when [[4,1], false, false]
-          @hand = HANDS[7]
+          @hand = HANDS[:four_card]
       when [[3,2], false, false]
-          @hand = HANDS[6]
+          @hand = HANDS[:full_house]
       when [[3,1,1], false, false]
-          @hand = HANDS[3]
+          @hand = HANDS[:three_card]
       when [[2,2,1], false, false]
-          @hand = HANDS[2]
+          @hand = HANDS[:two_pair]
       when [[2,1,1,1],false, false]
-          @hand = HANDS[1]
+          @hand = HANDS[:one_pair]
       else
       end
     end
@@ -72,7 +72,7 @@ module JudgeModule
     end
 
     def get_parameter(hand)
-      @parameter = HANDS.index(hand)
+      @parameter = HANDS_NAME_ARY.index(hand)
     end
 
     def best_hand_check(parameters,parameter)
