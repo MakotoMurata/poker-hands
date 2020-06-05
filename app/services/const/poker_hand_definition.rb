@@ -1,13 +1,13 @@
 module HandsModule
-  HANDS = {high_card:"ハイカード",
-           one_pair:"ワンペア",
-           two_pair:"ツーペア",
-           three_card:"スリーカード",
-           straight:"ストレート",
-           flush:"フラッシュ",
-           full_house:"フルハウス",
-           four_card:"フォーカード",
-           straight_flush:"ストレートフラッシュ"}
+  HIGH_CARD = "ハイカード"
+  ONE_PAIR = "ワンペア"
+  TWO_PAIR = "ツーペア"
+  THREE_CARD = "スリーカード"
+  STRAIGHT = "ストレート"
+  FLUSH = "フラッシュ"
+  FULL_HOUSE = "フルハウス"
+  FOUR_CARD = "フォーカード"
+  STRAIGHT_FLUSH = "ストレートフラッシュ"
 
-  HANDS_NAME_ARY = ["ハイカード","ワンペア","ツーペア", "スリーカード", "ストレート", "フラッシュ", "フルハウス", "フォーカード", "ストレートフラッシュ"]
-end
+  ALL_HANDS = [HIGH_CARD,ONE_PAIR,TWO_PAIR,THREE_CARD,STRAIGHT,FLUSH,FULL_HOUSE,FOUR_CARD,STRAIGHT_FLUSH]
+  end

@@ -5,7 +5,7 @@ module JudgeModule
     require_relative("const/poker_hand_definition")
     include HandsModule
 
-    attr_accessor :card, :hand, :errors, :best, :parameter
+    attr_accessor :card, :hand, :errors, :power, :invalid
 
     def judge
       suits = card.delete("^A-Z| ").split(" ")
@@ -32,54 +32,55 @@ module JudgeModule
       dupilicate = count_box.sort.reverse
       case [dupilicate, straight, flush]
       when [[1,1,1,1,1], true, true]
-          @hand = HANDS[:straight_flush]
+          @hand = STRAIGHT_FLUSH
+          @power = 8
       when [[1,1,1,1,1], true, false]
-          @hand = HANDS[:straight]
+          @hand = STRAIGHT
+          @power = 5
       when [[1,1,1,1,1], false, true]
-          @hand = HANDS[:flush]
+          @hand = FLUSH
+          @power = 5
       when [[1,1,1,1,1], false, false]
-          @hand = HANDS[:high_card]
+          @hand = HIGH_CARD
+          @power = 0
       when [[4,1], false, false]
-          @hand = HANDS[:four_card]
+          @hand = FOUR_CARD
+          @power = 7
       when [[3,2], false, false]
-          @hand = HANDS[:full_house]
+          @hand = FULL_HOUSE
+          @power = 6
       when [[3,1,1], false, false]
-          @hand = HANDS[:three_card]
+          @hand = THREE_CARD
+          @power = 3
       when [[2,2,1], false, false]
-          @hand = HANDS[:two_pair]
+          @hand = TWO_PAIR
+          @power = 2
       when [[2,1,1,1],false, false]
-          @hand = HANDS[:one_pair]
+          @hand = ONE_PAIR
+          @power = 1
       else
       end
     end
 
-    def validate_check
+    def card_invalid?
+      each_card = card.split(" ")
       @errors = []
-      cards = card.split(" ")
-      if card.empty?
+      @invalid = false
+      if each_card.empty?
         @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
-      elsif cards.size - cards.uniq.size != 0
+        @invalid = true
+      elsif each_card.size - each_card.uniq.size != 0
         @errors << "カードが重複しています"
+        @invalid = true
       elsif card !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
         @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
-        cards.each_with_index do |card,idx|
-        index = idx +1
+        @invalid = true
+        each_card.each_with_index do |card,idx|
+          index = idx +1
           if card !~  /\A[SDCH]([1-9]|1[0-3])\z/
             @errors << "#{index}番目のカードが不正です(#{card})"
           end
         end
-      end
-    end
-
-    def get_parameter(hand)
-      @parameter = HANDS_NAME_ARY.index(hand)
-    end
-
-    def best_hand_check(parameters,parameter)
-      if parameters.max == parameter
-        @best = true
-      else
-        @best = false
       end
     end
   end
