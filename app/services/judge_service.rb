@@ -7,6 +7,10 @@ module JudgeModule
 
     attr_accessor :card, :hand, :errors, :power, :invalid
 
+    def initialize(card)
+      @card = card
+    end
+
     def judge
       suits = card.delete("^A-Z| ").split(" ")
       nums = card.delete("^0-9| ").split(" ").map(&:to_i)

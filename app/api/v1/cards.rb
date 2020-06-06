@@ -5,7 +5,7 @@ module V1
     require_relative '../../services/const/poker_hand_definition'
     include HandsModule
     resources :cards do
-      desc 'JSON形式で正しいエンドポイントにリクエストされたとき'
+      desc 'ポーカーの手札の情報を受け取り、役名とその中でもっとも役名を返却する'
       params do
         requires :cards, type: Array[String]
       end
@@ -13,9 +13,8 @@ module V1
         cards_set = params[:cards]
         card_set = []
         cards_set.each do |cards|
-          card_set << HandsJudgeService.new(card: cards)
+          card_set << HandsJudgeService.new(cards)
         end
-
         powers = []
         card_set.each do |card|
           if card.card_invalid?
@@ -24,7 +23,6 @@ module V1
             powers << ALL_HANDS.index(card.hand)
           end
         end
-
         errors = []
         results = []
         card_set.each do |card|
@@ -41,10 +39,8 @@ module V1
             @results = {result: results}
           end
         end
-
         if @errors.nil?
           present @results
-
         elsif @results.nil?
           present @errors
         else
