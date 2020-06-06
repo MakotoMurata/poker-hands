@@ -42,10 +42,10 @@ module V1
           end
         end
 
-        if @errors == nil
+        if @errors.nil?
           present @results
 
-        elsif @results == nil
+        elsif @results.nil?
           present @errors
         else
           @all_results = {result:results,error:errors}
