@@ -1,6 +1,6 @@
 require 'rails_helper'
  RSpec.describe "V1 API", type: :request do
-  context '全て正しいカードの場合' do
+  context '全て正しいカード(同じ強さの役がない)の場合' do
       let(:cards_set){{"cards":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}}
     before do
       post '/api/v1/cards/check', params: cards_set
@@ -22,6 +22,28 @@ require 'rails_helper'
     end
   end
 
+  context '全て正しいカード(同じ強さの役がある)の場合' do
+    let(:cards_set){{"cards":[ "H1 H13 H12 H11 H10", "S1 S13 S12 S11 S10", "C13 D12 C11 H8 H7"]}}
+  before do
+    post '/api/v1/cards/check', params: cards_set
+  end
+  it 'ステータスコードは201で帰ってくること' do
+    expect(response.status).to eq 201
+  end
+  it '全てのカードが正しく判定されること' do
+    json = JSON.parse(response.body)
+    expect(json["result"][0]["card"]).to eq "H1 H13 H12 H11 H10"
+    expect(json["result"][0]["hand"]).to eq "ストレートフラッシュ"
+    expect(json["result"][0]["best"]).to eq true
+    expect(json["result"][1]["card"]).to eq "S1 S13 S12 S11 S10"
+    expect(json["result"][1]["hand"]).to eq "ストレートフラッシュ"
+    expect(json["result"][1]["best"]).to eq true
+    expect(json["result"][2]["card"]).to eq "C13 D12 C11 H8 H7"
+    expect(json["result"][2]["hand"]).to eq "ハイカード"
+    expect(json["result"][2]["best"]).to eq false
+  end
+
+  end
   context '正しいカードと不正なカードが混ざっている場合' do
       let(:cards_set){{"cards":["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2",""]}}
     before do
