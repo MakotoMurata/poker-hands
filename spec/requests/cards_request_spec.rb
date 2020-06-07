@@ -1,8 +1,8 @@
 require 'rails_helper'
  RSpec.describe "V1 API", type: :request do
   context '全て正しいカードの場合' do
+      let(:cards_set){{"cards":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}}
     before do
-      cards_set = {"cards":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}
       post '/api/v1/cards/check', params: cards_set
     end
     it 'ステータスコードは201で帰ってくること' do
@@ -23,8 +23,8 @@ require 'rails_helper'
   end
 
   context '正しいカードと不正なカードが混ざっている場合' do
+      let(:cards_set){{"cards":["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2",""]}}
     before do
-      cards_set = {"cards":["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2",""]}
       post '/api/v1/cards/check', params: cards_set
     end
     it 'ステータスコードが201で帰ってくること' do
@@ -44,8 +44,8 @@ require 'rails_helper'
   end
 
   context '全て不正なカードである場合' do
+      let(:cards_set){{"cards":["","S1 S1 S2 S3 S4","A1 S2 S3 S4 S5"]}}
     before do
-      cards_set = {"cards":["","S1 S1 S2 S3 S4","A1 S2 S3 S4 S5"]}
       post '/api/v1/cards/check', params: cards_set
     end
     it 'ステータスコードが201で帰ってくること' do
@@ -64,8 +64,8 @@ require 'rails_helper'
   end
 
   context 'リクエストされたパラメータの形式が間違っている場合' do
+    let(:cards_set){{"hands":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}}
     before do
-     cards_set = {"hands":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}
      post '/api/v1/cards/check', params: cards_set
     end
     it 'ステータスコードは400で帰ってくること' do
@@ -78,8 +78,8 @@ require 'rails_helper'
   end
 
   context '不正なurlにリクエストがあった場合' do
+    let(:cards_set){{"cards":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}}
     before do
-      cards_set = {"cards":[ "H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]}
       post '/api/v1/cards/chekk', params: cards_set
     end
     it 'ステータスコードが404で帰ってくること' do
