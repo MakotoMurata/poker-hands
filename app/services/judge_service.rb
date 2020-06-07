@@ -1,71 +1,62 @@
 module JudgeModule
   class HandsJudgeService
     include ActiveModel::Model
-
     require_relative("const/poker_hand_definition")
     include HandsModule
-
-    attr_accessor :card, :hand, :errors, :power, :invalid
-
+    attr_accessor :card, :hand, :errors, :hand_power, :invalid
     def initialize(card)
       @card = card
     end
-
     def judge
       suits = card.delete("^A-Z| ").split(" ")
       nums = card.delete("^0-9| ").split(" ").map(&:to_i)
-
       if suits.count(suits[0]) == suits.length
         flush = true
       else
         flush = false
       end
-
       if nums.sort[1] == nums.sort[0] +1 && nums.sort[2] == nums.sort[0] + 2 && nums.sort[3] == nums.sort[0] +3 && nums.sort[4] == nums.sort[0] + 4 || nums.sort == [1,10,11,12,13]
         straight = true
       else
         straight = false
       end
-
       count_box = []
       dup_num = nums.uniq
       dup_num.each do |x|
         count_box << nums.count(x)
       end
-
       dupilicate = count_box.sort.reverse
       case [dupilicate, straight, flush]
       when [[1,1,1,1,1], true, true]
           @hand = STRAIGHT_FLUSH
-          @power = 8
+          @hand_power = 8
       when [[1,1,1,1,1], true, false]
           @hand = STRAIGHT
-          @power = 5
+          @hand_power = 5
       when [[1,1,1,1,1], false, true]
           @hand = FLUSH
-          @power = 5
+          @hand_power = 5
       when [[1,1,1,1,1], false, false]
           @hand = HIGH_CARD
-          @power = 0
+          @hand_power = 0
       when [[4,1], false, false]
           @hand = FOUR_CARD
-          @power = 7
+          @hand_power = 7
       when [[3,2], false, false]
           @hand = FULL_HOUSE
-          @power = 6
+          @hand_power = 6
       when [[3,1,1], false, false]
           @hand = THREE_CARD
-          @power = 3
+          @hand_power = 3
       when [[2,2,1], false, false]
           @hand = TWO_PAIR
-          @power = 2
+          @hand_power = 2
       when [[2,1,1,1],false, false]
           @hand = ONE_PAIR
-          @power = 1
+          @hand_power = 1
       else
       end
     end
-
     def card_invalid?
       each_card = card.split(" ")
       @errors = []

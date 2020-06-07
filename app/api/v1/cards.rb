@@ -20,13 +20,13 @@ module V1
           if card.card_invalid?
           else
             card.judge
-            powers << ALL_HANDS.index(card.hand)
+            powers << card.hand_power
           end
         end
         errors = []
         results = []
         card_set.each do |card|
-          if card.power == powers.max
+          if card.hand_power == powers.max
             @best = true
           else
             @best = false
@@ -44,7 +44,7 @@ module V1
         elsif @results.nil?
           present @errors
         else
-          @all_results = {result:results,error:errors}
+          @all_results = {result: results, error: errors}
           present @all_results
         end
       end
