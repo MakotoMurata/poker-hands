@@ -3,73 +3,69 @@ module JudgeModule
     include ActiveModel::Model
     require_relative("const/poker_hand_definition")
     include HandsModule
-    attr_accessor :card, :hand, :errors, :hand_power, :invalid
+    require_relative('const/error_message_definition')
+    include ErrorMessageModule
+    attr_accessor :card, :hand, :errors, :hand_power, :valid
     def initialize(card)
       @card = card
     end
     def judge
       suits = card.delete("^A-Z| ").split(" ")
       nums = card.delete("^0-9| ").split(" ").map(&:to_i)
-      if suits.count(suits[0]) == suits.length
-        flush = true
-      else
-        flush = false
-      end
-      if nums.sort[1] == nums.sort[0] +1 && nums.sort[2] == nums.sort[0] + 2 && nums.sort[3] == nums.sort[0] +3 && nums.sort[4] == nums.sort[0] + 4 || nums.sort == [1,10,11,12,13]
-        straight = true
-      else
-        straight = false
-      end
+      flush = false
+      flush = true if suits.count(suits[0]) == suits.length
+      straight = false
+      straight = true if nums.sort[1] == nums.sort[0] +1 && nums.sort[2] == nums.sort[0] + 2 && nums.sort[3] == nums.sort[0] +3 && nums.sort[4] == nums.sort[0] + 4 || nums.sort == [1,10,11,12,13]
       count_box = []
       dup_num = nums.uniq
       dup_num.each do |x|
         count_box << nums.count(x)
       end
-      dupilicate = count_box.sort.reverse
-      case [dupilicate, straight, flush]
+      duplicate = count_box.sort.reverse
+      case [duplicate, straight, flush]
       when [[1,1,1,1,1], true, true]
           @hand = STRAIGHT_FLUSH
-          @hand_power = 8
+          @hand_power = 9
       when [[1,1,1,1,1], true, false]
           @hand = STRAIGHT
-          @hand_power = 5
+          @hand_power = 6
       when [[1,1,1,1,1], false, true]
           @hand = FLUSH
-          @hand_power = 5
+          @hand_power = 6
       when [[1,1,1,1,1], false, false]
           @hand = HIGH_CARD
-          @hand_power = 0
+          @hand_power = 1
       when [[4,1], false, false]
           @hand = FOUR_CARD
-          @hand_power = 7
+          @hand_power = 8
       when [[3,2], false, false]
           @hand = FULL_HOUSE
-          @hand_power = 6
+          @hand_power = 7
       when [[3,1,1], false, false]
           @hand = THREE_CARD
-          @hand_power = 3
+          @hand_power = 4
       when [[2,2,1], false, false]
           @hand = TWO_PAIR
-          @hand_power = 2
+          @hand_power = 3
       when [[2,1,1,1],false, false]
           @hand = ONE_PAIR
-          @hand_power = 1
+          @hand_power = 2
       else
       end
     end
-    def card_invalid?
+    def valid_check
       each_card = card.split(" ")
+      @valid = true
       @errors = []
-      @invalid = false
-      if each_card.empty?
-        @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
-        @invalid = true
+      if card.empty?
+        @errors << FORMAT_ERROR_MSG
+        @valid = false
       elsif each_card.size - each_card.uniq.size != 0
-        @errors << "カードが重複しています"
-        @invalid = true
+        @errors << DUPLICATION_ERROR_MSG
+        @valid = false
       elsif card !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
-        @errors << "5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。(例: S1 H3 D9 C13 S11)"
-        @invalid = true
+        @errors << FORMAT_ERROR_MSG
+        @valid = false
         each_card.each_with_index do |card,idx|
           index = idx +1
           if card !~  /\A[SDCH]([1-9]|1[0-3])\z/

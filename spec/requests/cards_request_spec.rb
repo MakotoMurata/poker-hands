@@ -1,6 +1,6 @@
 require 'rails_helper'
  RSpec.describe "V1 API", type: :request do
-  describe 'リクエストを正しく受け取る時の処理(status code 202)' do
+  describe 'リクエストを正しく受け取る時の処理(status code 201)' do
     let(:cards_set){{"cards": @params}}
     context '全て正しいカード(同じ強さの役がない)の場合' do
       before do
