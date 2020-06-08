@@ -2,8 +2,6 @@ module V1
   class Cards < Grape::API
     require_relative '../../services/judge_service'
     include JudgeModule
-    require_relative '../../services/const/poker_hand_definition'
-    include HandsModule
     resources :cards do
       desc 'ポーカーの手札の情報を受け取り、役名とその中でもっとも役名を返却する'
       params do
@@ -15,38 +13,29 @@ module V1
         cards_set.each do |cards|
           card_set << HandsJudgeService.new(cards)
         end
-        powers = []
+        max_power = 0
         card_set.each do |card|
-          if card.card_invalid?
-          else
+          card.valid_check
+          if card.errors.empty?
             card.judge
-            powers << card.hand_power
+            max_power = card.hand_power if card.hand_power > max_power
           end
         end
         errors = []
         results = []
         card_set.each do |card|
-          if card.hand_power == powers.max
-            @best = true
+          best = false
+          best = true if card.hand_power == max_power
+          if card.errors.present?
+            errors << {card: card.card, msg: card.errors}
           else
-            @best = false
-          end
-          if card.card_invalid?
-            errors << {card: card.card,msg:card.errors}
-            @errors = {error: errors}
-          else
-            results << {card: card.card,hand: card.hand,best: @best}
-            @results = {result: results}
+            results << {card: card.card, hand: card.hand, best: best}
           end
         end
-        if @errors.nil?
-          present @results
-        elsif @results.nil?
-          present @errors
-        else
-          @all_results = {result: results, error: errors}
-          present @all_results
-        end
+        @all_results = {}
+        @all_results["result"] = results if results.present?
+        @all_results["error"] = errors if errors.present?
+        present @all_results
       end
     end
   end
