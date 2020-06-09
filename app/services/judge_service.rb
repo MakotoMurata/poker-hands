@@ -5,9 +5,10 @@ module JudgeModule
     include HandsModule
     require_relative('const/error_message_definition')
     include ErrorMessageModule
-    attr_accessor :card, :hand, :errors, :hand_power, :valid
+    attr_accessor :card, :hand, :errors, :hand_power, :valid, :best
     def initialize(card)
       @card = card
+      @best = false
     end
     def judge
       suits = card.delete("^A-Z| ").split(" ")
@@ -53,9 +54,9 @@ module JudgeModule
       else
       end
     end
-    def valid_check
+
+    def valid_check?
       each_card = card.split(" ")
-      @valid = true
       @errors = []
       if card.empty?
         @errors << FORMAT_ERROR_MSG
@@ -65,13 +66,15 @@ module JudgeModule
         @valid = false
       elsif card !~ /\A[SDCH]([1-9]|1[0-3]) [SDCH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3]) [SCDH]([1-9]|1[0-3])\z/
         @errors << FORMAT_ERROR_MSG
-        @valid = false
         each_card.each_with_index do |card,idx|
           index = idx +1
           if card !~  /\A[SDCH]([1-9]|1[0-3])\z/
             @errors << "#{index}番目のカードが不正です(#{card})"
           end
         end
+        @valid = false
+      else
+        @valid = true
       end
     end
   end

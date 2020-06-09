@@ -1,11 +1,14 @@
 require 'rails_helper'
  RSpec.describe "V1 API", type: :request do
-  describe 'リクエストを正しく受け取る時の処理(status code 201)' do
+   def post_request
+     post '/api/v1/cards/check', params: cards_set
+   end
+   describe 'リクエストを正しく受け取る時の処理(status code 201)' do
     let(:cards_set){{"cards": @params}}
     context '全て正しいカード(同じ強さの役がない)の場合' do
       before do
         @params = ["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]
-        post '/api/v1/cards/check', params: cards_set
+        post_request
       end
       it 'ステータスコードは201で帰ってくること' do
         expect(response.status).to eq 201
@@ -26,7 +29,7 @@ require 'rails_helper'
     context '全て正しいカード(同じ強さの役がある)の場合' do
       before do
         @params = [ "H1 H13 H12 H11 H10", "S1 S13 S12 S11 S10", "C13 D12 C11 H8 H7"]
-        post '/api/v1/cards/check', params: cards_set
+        post_request
       end
       it 'ステータスコードは201で帰ってくること' do
         expect(response.status).to eq 201
@@ -47,7 +50,7 @@ require 'rails_helper'
     context '正しいカードと不正なカードが混ざっている場合' do
         let(:cards_set){{"cards":["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2",""]}}
       before do
-        post '/api/v1/cards/check', params: cards_set
+        post_request
       end
       it 'ステータスコードが201で帰ってくること' do
         expect(response.status).to eq 201
@@ -67,7 +70,7 @@ require 'rails_helper'
     context '全て不正なカードである場合' do
       before do
         @params = ["","S1 S1 S2 S3 S4","A1 S2 S3 S4 S5"]
-        post '/api/v1/cards/check', params: cards_set
+        post_request
       end
       it 'ステータスコードが201で帰ってくること' do
         expect(response.status).to eq 201
@@ -88,7 +91,7 @@ require 'rails_helper'
     let(:cards_set){{"hands": @params}}
     before do
       @params = ["H1 H13 H12 H11 H10", "H9 C9 S9 H2 C2", "C13 D12 C11 H8 H7"]
-      post '/api/v1/cards/check', params: cards_set
+      post_request
     end
     it 'ステータスコードは400で帰ってくること' do
       expect(response.status).to eq 400

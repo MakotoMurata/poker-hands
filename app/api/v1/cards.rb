@@ -15,21 +15,19 @@ module V1
         end
         max_power = 0
         card_set.each do |card|
-          card.valid_check
-          if card.errors.empty?
-            card.judge
-            max_power = card.hand_power if card.hand_power > max_power
-          end
+         if  card.valid_check?
+           card.judge
+           max_power = card.hand_power if card.hand_power > max_power
+         end
         end
         errors = []
         results = []
         card_set.each do |card|
-          best = false
-          best = true if card.hand_power == max_power
+          card.best = true if card.hand_power == max_power
           if card.errors.present?
             errors << {card: card.card, msg: card.errors}
           else
-            results << {card: card.card, hand: card.hand, best: best}
+            results << {card: card.card, hand: card.hand, best: card.best}
           end
         end
         @all_results = {}

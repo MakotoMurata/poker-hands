@@ -8,49 +8,49 @@ RSpec.describe HandsJudgeService,  type: :service do
     context '判定するカードが空白の場合' do
       let(:card_set){""}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG]
       end
     end
     context '判定するカードが重複している場合' do
       let(:card_set){"S1 S1 S2 S3 S4"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [DUPLICATION_ERROR_MSG]
       end
     end
     context '判定するカードが５枚未満の場合' do
       let(:card_set){"C1"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG]
       end
     end
     context '判定するカードが６枚以上の場合' do
       let(:card_set){"C7 C6 C5 C4 C3 C2"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG]
       end
     end
     context '判定するカードにCDSH以外の文字が含まれている場合' do
       let(:card_set){"A7 C6 C5 C4 C3"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG,"1番目のカードが不正です(A7)"]
       end
     end
     context '判定するカードに1~13以外の文字が含まれている場合' do
       let(:card_set){"C16 C6 C5 C4 C3"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG, "1番目のカードが不正です(C16)"]
       end
     end
     context '判定するカードが半角スペースで区切られていない場合' do
       let(:card_set){"C2　C3　C4　C5　C6"}
       it '正しいエラーメッセージを表示する' do
-        card.valid_check
+        card.valid_check?
         expect(card.errors).to eq [FORMAT_ERROR_MSG, "1番目のカードが不正です(C2　C3　C4　C5　C6)"]
       end
     end

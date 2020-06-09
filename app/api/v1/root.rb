@@ -5,9 +5,6 @@ module V1
     rescue_from Grape::Exceptions::Base do
       error!({error:"400 Bad request リクエストデータに不正があります"},400)
     end
-    route :any,'*path' do
-      error!({error:"404 Not Found リソースがみつかりません"},404)
-    end
     rescue_from :all do
       error!({error:"500 Internal Server Error 内部でエラーが起きています"},500)
     end

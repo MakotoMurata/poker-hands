@@ -6,8 +6,7 @@ class CardsController < ApplicationController
 
   def check
     @card = HandsJudgeService.new(params[:card_set])
-    @card.valid_check
-    if @card.errors.empty?
+    if @card.valid_check?
       @card.judge
       render :result
     else
