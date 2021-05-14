@@ -17,3 +17,10 @@ module AppName
     # the framework and any gems in your application.
   end
 end
+
+module GrapeApp
+  class Application < Rails::Application
+    config.paths.add File.join('app','apis'), glob: File.join('**', '*.rb')
+    config.autoload_paths += Dir[Rails.root.join('app', 'apis', '*')]
+  end
+end
