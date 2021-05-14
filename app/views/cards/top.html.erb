@@ -1,0 +1,21 @@
+<div class="main">
+  <div class="layer">
+    <div class="container">
+      <h1>Check a Porker Hand</h1>
+      <div class="checkarea">
+        <%= form_tag("/check") do %>
+        <ul class="form">
+          <li><input class="text" name="card_set"></li>
+          <li><input class="btn"  type="submit" value="Check"></li>
+        </ul>
+        <% end %>
+        <ul class="attention">
+        <li>5つのカード指定文字{半角英字(S,D,C,H)と半角数字(1~13)を組み合わせたもの}を半角スペース区切りで入力してください。</li>
+        <li>(例)</li>
+        <li>C1 D1 H3 S7 H8 => ワンペア</li>
+        <li>H1 H2 H3 H4 H5 => ストレートフラッシュ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
