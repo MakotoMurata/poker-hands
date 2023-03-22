@@ -1,15 +1,21 @@
 module JudgeModule
+
   class HandsJudgeService
-    include ActiveModel::Model
+    
     require_relative("const/poker_hand_definition")
-    include HandsModule
     require_relative('const/error_message_definition')
+
+    include ActiveModel::Model
     include ErrorMessageModule
+    include HandsModule
+    
     attr_accessor :card, :hand, :errors, :hand_power, :valid, :best
+
     def initialize(card)
       @card = card
       @best = false
     end
+
     def judge
       suits = card.delete("^A-Z| ").split(" ")
       nums = card.delete("^0-9| ").split(" ").map(&:to_i)
